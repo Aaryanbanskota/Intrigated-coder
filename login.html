@@ -109,7 +109,7 @@
     const auth = getAuth(app);
     const googleProvider = new GoogleAuthProvider();
 
-    // Email/Password Login Function
+    // Email/Password Login Function with Redirect
     window.handleEmailLogin = function() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
@@ -118,7 +118,7 @@
           .then((userCredential) => {
             const user = userCredential.user;
             alert('Login successful! User: ' + user.email);
-            // Redirect or handle logged-in state here
+            window.location.href = 'webpage.html'; // Redirect to webpage.html
           })
           .catch((error) => {
             const errorMessage = error.message;
@@ -129,13 +129,13 @@
       }
     };
 
-    // Google Login Function
+    // Google Login Function with Redirect
     window.handleGoogleLogin = function() {
       signInWithPopup(auth, googleProvider)
         .then((result) => {
           const user = result.user;
           alert('Google Login successful! User: ' + user.email);
-          // Redirect or handle logged-in state here
+          window.location.href = 'webpage.html'; // Redirect to webpage.html
         })
         .catch((error) => {
           const errorMessage = error.message;
