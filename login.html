@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page with Particle Background</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+    .login-container {
+      position: relative;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #00ffff, inset 0 0 10px #00ffff;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+    }
+    .login-container h2 {
+      color: #fff;
+      font-size: 24px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .login-container h2::after {
+      content: '';
+      position: absolute;
+      width: 50px;
+      height: 2px;
+      background: #00ffff;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 5px #00ffff;
+    }
+    .login-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid #00ffff;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 14px;
+      box-shadow: 0 0 5px #00ffff;
+    }
+    .login-container input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #00ffff;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 10px;
+      background: #00ffff;
+      border: none;
+      border-radius: 5px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin: 5px 0;
+    }
+    .login-container button:hover {
+      background: #00cccc;
+    }
+    .login-container p {
+      color: #00ffff;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    .login-container a {
+      color: #00ffff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="bg-black flex items-center justify-center h-screen">
+  <canvas id="particleCanvas"></canvas>
+  <div class="login-container">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="handleEmailLogin()">Login with Email</button>
+    <button onclick="handleGoogleLogin()">Login with Google</button>
+    <p>Remember me</p>
+    <p><a href="#">Forgot Password?</a></p>
+  </div>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAwIqULAO5sqYmvmNblRHUkHypqPeMXWfU",
+      authDomain: "login-for-ai.firebaseapp.com",
+      projectId: "login-for-ai",
+      storageBucket: "login-for-ai.firebasestorage.app",
+      messagingSenderId: "1065557951072",
+      appId: "1:1065557951072:web:257653d47aceb1cd2c3905",
+      measurementId: "G-3LB4R2L2D9"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    // Email/Password Login Function
+    window.handleEmailLogin = function() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      if (email && password) {
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            alert('Login successful! User: ' + user.email);
+            // Redirect or handle logged-in state here
+          })
+          .catch((error) => {
+            const errorMessage = error.message;
+            alert('Login failed: ' + errorMessage);
+          });
+      } else {
+        alert('Please fill in both fields.');
+      }
+    };
+
+    // Google Login Function
+    window.handleGoogleLogin = function() {
+      signInWithPopup(auth, googleProvider)
+        .then((result) => {
+          const user = result.user;
+          alert('Google Login successful! User: ' + user.email);
+          // Redirect or handle logged-in state here
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          alert('Google Login failed: ' + errorMessage);
+        });
+    };
+
+    // Particle animation
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 100;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      draw() {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
