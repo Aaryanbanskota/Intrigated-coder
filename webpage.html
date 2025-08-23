@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🚧 Under Construction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#0b0f17; --bg2:#0a1a2e; --acc:#ffce00; --acc2:#ff3b3b; --glow:#7fd7ff;
+      --tape1:#111; --tape2:#ffd000; --text:#eaf6ff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family:"Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 20% 10%, #103468 0%, transparent 50%),
+                  radial-gradient(900px 500px at 90% 80%, #1a2f57 0%, transparent 60%),
+                  linear-gradient(120deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+    }
+    /* Subtle moving gradient */
+    body::before{
+      content:""; position:fixed; inset:-10%; pointer-events:none; mix-blend-mode:soft-light;
+      background: conic-gradient(from 0deg at 50% 50%, rgba(127,215,255,.15), rgba(255,206,0,.08), rgba(255,59,59,.1), rgba(127,215,255,.15));
+      filter: blur(60px); animation: spin 40s linear infinite;
+      z-index:0;
+    }
+    @keyframes spin{to{transform:rotate(1turn)}}
+
+    /* Scanline + noise overlay */
+    .noise{ position:fixed; inset:0; pointer-events:none; opacity:.07; z-index:1;
+      background:
+        repeating-linear-gradient(to bottom, rgba(255,255,255,.15) 0 1px, transparent 1px 3px);
+      mix-blend-mode:overlay;
+    }
+
+    .wrap{ position:relative; z-index:2; height:100%; display:grid; place-items:center; padding:min(5vw,48px);}
+
+    .card{
+      width:min(1100px, 92vw); aspect-ratio: 16/9; position:relative; border-radius:28px; overflow:hidden;
+      background:rgba(8,12,20,.55); box-shadow:0 30px 100px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.08);
+      backdrop-filter: blur(8px) saturate(120%);
+    }
+
+    /* Animated construction tape borders */
+    .tape{ position:absolute; inset:auto -20% -18px -20%; height:70px; transform:rotate(-6deg); background-size:50px 70px;
+      background-image: repeating-linear-gradient(135deg, var(--tape2) 0 25px, var(--tape1) 25px 50px);
+      box-shadow:0 8px 30px rgba(0,0,0,.35), inset 0 0 0 3px rgba(0,0,0,.25);
+      animation: slideTape 2.5s linear infinite; filter:contrast(1.1);
+    }
+    .tape.top{ inset:-18px -20% auto -20%; transform:rotate(6deg)}
+    @keyframes slideTape{ to{ background-position:50px 0 } }
+
+    /* Center stage */
+    .stage{ position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:min(6vw,60px); padding:clamp(16px,4vw,48px) clamp(20px,5vw,64px);}
+
+    /* Left: text stack */
+    .stack{ display:grid; gap:20px}
+
+    .badge{ width:max-content; text-transform:uppercase; letter-spacing:.2em; font:700 12px/1 Rajdhani, sans-serif; color:#001; padding:8px 12px; border-radius:999px; background:linear-gradient(90deg, var(--acc), #fff480);
+      box-shadow: 0 8px 24px rgba(255,206,0,.35);}
+
+    .title{ font-family:Rajdhani, system-ui, sans-serif; font-weight:700; font-size:clamp(38px,6vw,92px); line-height:1; letter-spacing:.03em; position:relative; 
+      text-shadow:0 0 32px rgba(127,215,255,.4), 0 6px 0 rgba(0,0,0,.35);
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,.5));
+    }
+
+    /* Glitch effect */
+    .glitch{position:relative; display:inline-block}
+    .glitch::before,.glitch::after{
+      content:attr(data-text); position:absolute; inset:0;
+      clip-path: polygon(0 2%,100% 2%,100% 44%,0 44%);
+      animation: glitchTop 2s infinite linear alternate-reverse;
+    }
+    .glitch::after{ clip-path: polygon(0 56%,100% 56%,100% 98%,0 98%); animation: glitchBot 2.1s infinite linear alternate-reverse;}
+    @keyframes glitchTop{ 0%{ transform:translate(0,0)} 20%{ transform:translate(-2px,-1px)} 40%{ transform:translate(2px,1px)} 60%{ transform:translate(-1px,1px)} 80%{ transform:translate(1px,-1px)} 100%{ transform:translate(0,0)} }
+    @keyframes glitchBot{ 0%{ transform:translate(0,0)} 20%{ transform:translate(2px,1px)} 40%{ transform:translate(-2px,-1px)} 60%{ transform:translate(1px,-1px)} 80%{ transform:translate(-1px,1px)} 100%{ transform:translate(0,0)} }
+
+    .subtitle{ max-width:62ch; opacity:.9; font-size:clamp(14px,1.6vw,18px)}
+
+    .cta{
+      display:inline-grid; align-items:center; grid-auto-flow:column; gap:14px; padding:14px 22px; border:none; border-radius:14px; cursor:pointer;
+      font:700 15px/1 Rajdhani, sans-serif; letter-spacing:.12em; text-transform:uppercase; text-decoration:none; color:#001;
+      background:linear-gradient(180deg, #fff480, var(--acc)); box-shadow:0 12px 35px rgba(255,206,0,.35), inset 0 0 0 2px rgba(0,0,0,.15);
+      transform: translateZ(0);
+    }
+    .cta:hover{ filter:brightness(1.05) contrast(1.05)}
+    .cta:active{ transform: translateY(1px)}
+
+    /* Right: animated scene */
+    .scene{ position:relative; height:100%; min-height:280px; }
+
+    /* Ground grid */
+    .grid{
+      position:absolute; inset:30% -10% 0 -10%; background:
+        linear-gradient(rgba(127,215,255,.12), rgba(127,215,255,0) 60%),
+        repeating-linear-gradient(to right, rgba(127,215,255,.18) 0 2px, transparent 2px 80px),
+        repeating-linear-gradient(to top, rgba(127,215,255,.12) 0 2px, transparent 2px 80px);
+      transform: perspective(800px) rotateX(65deg) translateY(4%);
+      border-top:1px solid rgba(127,215,255,.25);
+      filter: drop-shadow(0 -10px 30px rgba(127,215,255,.12));
+    }
+
+    /* Crane */
+    .crane{ position:absolute; right:10%; top:6%; width:min(40vw,420px); filter: drop-shadow(0 20px 40px rgba(0,0,0,.5));}
+    .hook{ transform-origin: 90% 10%; animation: swing 3.5s ease-in-out infinite; }
+    @keyframes swing{ 0%,100%{ transform: rotate(-5deg)} 50%{ transform: rotate(5deg)} }
+
+    /* Gears */
+    .gear{ position:absolute; width:120px; height:120px; border-radius:50%; left:6%; bottom:16%; filter: drop-shadow(0 10px 22px rgba(0,0,0,.6));}
+    .gear.small{ width:74px; height:74px; left:16%; bottom:12%}
+    .spin{ animation: spin 10s linear infinite }
+    .spin.fast{ animation-duration: 5s }
+
+    /* Floating particles canvas */
+    canvas#fx{ position:absolute; inset:0; z-index:-1; }
+
+    /* Footer note */
+    .foot{ position:absolute; bottom:10px; right:16px; font:600 11px/1 Rajdhani, sans-serif; letter-spacing:.16em; opacity:.7 }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .stage{ grid-template-columns:1fr; align-content:center; gap:34px; padding:28px }
+      .scene{ min-height:220px }
+      .crane{ right:2%; width:min(70vw,480px)}
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="card" role="region" aria-label="Under Construction">
+      <div class="tape top" aria-hidden="true"></div>
+      <div class="tape" aria-hidden="true"></div>
+
+      <div class="stage">
+        <div class="stack">
+          <div class="badge">🚧 Site Update In Progress</div>
+          <h1 class="title">
+            <span class="glitch" data-text="UNDER CONSTRUCTION">UNDER CONSTRUCTION</span>
+          </h1>
+          <p class="subtitle">We’re laying down some fresh code and shiny UI. You can still jump to the main page if you like — just mind the wet paint!</p>
+          <a class="cta" href="ai.html" aria-label="Go to main page">ENTER MAIN PAGE →</a>
+        </div>
+
+        <div class="scene" aria-hidden="true">
+          <canvas id="fx"></canvas>
+          <div class="grid"></div>
+
+          <!-- Crane SVG -->
+          <svg class="crane" viewBox="0 0 500 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="y" x1="0" y1="0" x2="1" y2="1">
+                <stop stop-color="#ffd000"/>
+                <stop offset="1" stop-color="#ff9a00"/>
+              </linearGradient>
+              <linearGradient id="s" x1="0" y1="0" x2="0" y2="1">
+                <stop stop-color="#a6e4ff" stop-opacity=".9"/>
+                <stop offset="1" stop-color="#6bbdff" stop-opacity=".9"/>
+              </linearGradient>
+            </defs>
+            <!-- base -->
+            <rect x="10" y="260" width="480" height="40" rx="6" fill="url(#s)" opacity=".2"/>
+            <!-- tower -->
+            <g stroke="url(#y)" stroke-width="6">
+              <path d="M120 260 L120 90"/>
+              <path d="M120 90 L340 90"/>
+              <path d="M340 90 L460 130"/>
+              <path d="M120 140 L160 90 L200 140 L240 90 L280 140 L320 90" opacity=".9"/>
+            </g>
+            <!-- hook -->
+            <g class="hook">
+              <line x1="460" y1="130" x2="460" y2="200" stroke="#e8f6ff" stroke-width="3"/>
+              <rect x="448" y="200" width="24" height="16" rx="3" fill="#e8f6ff"/>
+              <path d="M460 216 q 12 20 0 40" stroke="#e8f6ff" stroke-width="6" fill="none" stroke-linecap="round"/>
+            </g>
+          </svg>
+
+          <!-- Gears -->
+          <svg class="gear spin" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="26" fill="#0f253e" stroke="#7fd7ff" stroke-width="6"/>
+            <g fill="#7fd7ff">
+              <rect x="47" y="2" width="6" height="16" rx="2"/>
+              <rect x="47" y="82" width="6" height="16" rx="2"/>
+              <rect x="2" y="47" width="16" height="6" rx="2"/>
+              <rect x="82" y="47" width="16" height="6" rx="2"/>
+              <rect x="14" y="14" width="12" height="6" rx="2" transform="rotate(-45 20 17)"/>
+              <rect x="74" y="80" width="12" height="6" rx="2" transform="rotate(-45 80 83)"/>
+              <rect x="74" y="14" width="12" height="6" rx="2" transform="rotate(45 80 17)"/>
+              <rect x="14" y="80" width="12" height="6" rx="2" transform="rotate(45 20 83)"/>
+            </g>
+          </svg>
+          <svg class="gear small spin fast" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="22" fill="#0f253e" stroke="#7fd7ff" stroke-width="6"/>
+            <g fill="#7fd7ff">
+              <rect x="47" y="0" width="6" height="14" rx="2"/>
+              <rect x="47" y="86" width="6" height="14" rx="2"/>
+              <rect x="0" y="47" width="14" height="6" rx="2"/>
+              <rect x="86" y="47" width="14" height="6" rx="2"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="foot">Tip: press <kbd>G</kbd> for a little glow boost ✨</div>
+    </div>
+  </div>
+
+  <script>
+    // Floating particles background
+    const canvas = document.getElementById('fx');
+    const ctx = canvas.getContext('2d');
+    let w, h, dpr = Math.min(2, window.devicePixelRatio || 1);
+    const particles = [];
+    function resize(){
+      w = canvas.width = Math.floor(innerWidth * dpr);
+      h = canvas.height = Math.floor(innerHeight * dpr);
+      canvas.style.width = innerWidth + 'px';
+      canvas.style.height = innerHeight + 'px';
+    }
+    window.addEventListener('resize', resize, {passive:true});
+    resize();
+
+    const COUNT = 90;
+    for(let i=0;i<COUNT;i++){
+      particles.push({
+        x: Math.random()*w,
+        y: Math.random()*h*0.6 + h*0.1,
+        r: Math.random()*2*dpr + .5,
+        vx: (Math.random()*0.6 - 0.3)*dpr,
+        vy: (Math.random()*0.6 - 0.3)*dpr,
+        a: Math.random()*Math.PI*2
+      });
+    }
+    function tick(){
+      ctx.clearRect(0,0,w,h);
+      for(const p of particles){
+        p.x += p.vx; p.y += p.vy; p.a += 0.01;
+        if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0;
+        const glow = 6*dpr;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.shadowBlur = glow; ctx.shadowColor = 'rgba(127,215,255,0.6)';
+        ctx.fillStyle = 'rgba(127,215,255,0.65)';
+        ctx.fill();
+      }
+      requestAnimationFrame(tick);
+    }
+    tick();
+
+    // Glow boost on key G
+    let boosted = false;
+    window.addEventListener('keydown', (e)=>{
+      if(e.key.toLowerCase() === 'g'){
+        boosted = !boosted;
+        document.body.style.filter = boosted ? 'saturate(130%) brightness(105%)' : '';
+      }
+    });
+  </script>
+</body>
+</html>
